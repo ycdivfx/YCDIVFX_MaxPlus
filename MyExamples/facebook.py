@@ -7,5 +7,5 @@ if __name__ == '__main__':
 
     message = '3dsmax python connector with automatic authentication'
     fbc.postmessage(message)
-    #imagefilename = r'c:\test.jpg'
-    #fbc.postimage('', imagefilename)
+    imagefilename = r'c:\test.jpg'
+    fbc.postimage('', imagefilename)
