@@ -1,14 +1,14 @@
 import os
 from nose.tools import assert_equal
 
-from packages.mxsrunner.mxssettings import *
+import mxsrunner
 
 
-class test_MXSSettings():
+class test_mxssettings():
     @classmethod
     def setUpClass (self):
         self.CURRPATH = os.path.dirname(os.path.abspath(__file__))
-        self.mxs = MxsSettings()
+        self.mxs = mxsrunner.MxsSettings()
 
     def testLoad(self):
         res = self.mxs.load(os.path.join(self.CURRPATH, 'testdata', 'settings.ini'))
