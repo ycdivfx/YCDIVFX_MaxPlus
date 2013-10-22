@@ -1,7 +1,5 @@
-import maxfumefx
 import maxfumefx.jobsim as js
-reload(maxfumefx)
-reload(maxfumefx.jobsim)
+reload(js)
 
 ffxsim = js.FumeFxJobSim()
 

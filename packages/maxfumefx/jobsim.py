@@ -1,19 +1,12 @@
 import MaxPlus
+import maxfumefx
+reload(maxfumefx)
 
 
 class FumeFxJobSim:
     def __init__(self):
         """Class to represent a FumeFx Job in simulation mode"""
         pass
-
-    def getfumefxgrids(self, prefix='fumefx'):
-        nodes = []
-        for node in MaxPlus.Core.GetRootNode().Children:
-            if prefix in node.Name.lower():
-                nodes.append(node)
-
-        return nodes
-
 
     def sendjobffx(self, node):
         rs = MaxPlus.RenderSettings
@@ -31,7 +24,7 @@ class FumeFxJobSim:
         rs.SetWidth(25)
 
         MaxPlus.Core.EvalMAXScript('$' + node.Name + '.BackBurnerSim = True')
-        MaxPlus.Core.EvalMAXScript('SMTDSettings.JobName = GetFilenameFile(maxfilename) + \"_FFXSim_\" + ' + node.Name)
+        MaxPlus.Core.EvalMAXScript('SMTDSettings.JobName = GetFilenameFile(maxfilename) + \"_FFXSim_' + node.Name + '\"')
         MaxPlus.Core.EvalMAXScript('SMTDFunctions.SubmitJob()')
         MaxPlus.Core.EvalMAXScript('$' + node.Name + '.BackBurnerSim = False')
 
@@ -41,6 +34,6 @@ class FumeFxJobSim:
         rs.SetWidth(width)
 
     def simtodeadline(self):
-        fumefx_containers = getfumefxgrids()
+        fumefx_containers = maxfumefx.getfumefxgrids()
         for fumefx in fumefx_containers:
-            sendjobffx(fumefx)
+            self.sendjobffx(fumefx)
