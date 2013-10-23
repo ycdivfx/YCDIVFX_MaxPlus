@@ -1,4 +1,8 @@
-import MaxPlus
+try:
+    import MaxPlus
+except ImportError:
+    MaxPlus = None
+    print 'MaxPlus not present'
 
 
 def getfumefxgrids():
