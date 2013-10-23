@@ -1,4 +1,7 @@
-import MaxPlus
+try:
+    import MaxPlus
+except ImportError:
+    print 'MaxPlus not present'
 
 
 class VpGrabType():
