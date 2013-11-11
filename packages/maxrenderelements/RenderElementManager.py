@@ -1,4 +1,3 @@
-#!/usr/bin/python2.7
 '''
 Created on 07/11/2013
 
@@ -6,16 +5,14 @@ Created on 07/11/2013
 '''
 import MaxPlus
 
-__author__ = 'dgsantana'
-__version__ = '1.0'
-__copyright__ = 'Copyright 2013, Daniel Santana'
-__date__ = '11-11-2013'
 mxs_eval = MaxPlus.Core.EvalMAXScript
 
 
 class RenderElement(object):
     '''
     Single Render Element
+    We could use the Animatable return by the GetRenderElement, but since we can't pass
+    it to MAXScript, let's leave for now as is.
     '''
     _internal_index = -1
     __mxs_get_file = '((maxOps.GetCurRenderElementMgr()).GetRenderElementFilename %i) as string'
@@ -69,7 +66,7 @@ struct dsObjectPropertiesHelper
 dsObjectPropertiesHelper = dsObjectPropertiesHelper()
 True'''
 
-    def __init__(self, n):
+    def __init__(self, n=-1, className=None):
         self._internal_index = n
 
     def __init_mxs_(self):
@@ -117,18 +114,42 @@ True'''
 
 class RenderElementManager(object):
     '''
-    Missing RenderElementManager
+    Missing RenderElementManager class
     '''
 
     __mxs_re_count = '(maxOps.GetCurRenderElementMgr()).NumRenderElements()'
+    __mxs_re_del = '(maxOps.GetCurRenderElementMgr()).RemoveAllElements()'
+    __mxs_re_add = '''elm = %s()
+    (maxOps.GetCurRenderElementMgr()).AddRenderElement elm'''
     __mxs_re_g_active = '(maxOps.GetCurRenderElementMgr()).GetElementsActive()'
     __mxs_re_s_active = '(maxOps.GetCurRenderElementMgr()).SetElementsActive %s'
+    __mxs_re_g_display = '(maxOps.GetCurRenderElementMgr()).GetDisplayElements()'
+    __mxs_re_s_display = '(maxOps.GetCurRenderElementMgr()).SetDisplayElements %s'
 
     def __init__(self):
         pass
 
     def __build_element(self, i):
         return RenderElement(i)
+
+    def AddElement(self, className):
+        '''
+        Adds a new render element using the class name and
+        returns it.
+        @param className: Name of the element to add (MAXScript class name)
+        @type className: str
+        @return: Element
+        @rtype: RenderElement
+        '''
+        if mxs_eval(self.__mxs_re_add % className).Get():
+            return self.__build_element(len(self))
+        return None
+
+    #def RemoveElement(self, className):
+    #    pass
+
+    def RemoveAllElements(self):
+        return mxs_eval(self.__mxs_re_del)
 
     def GetElements(self):
         return [self.__build_element(i) for i in xrange(len(self))]
@@ -138,6 +159,22 @@ class RenderElementManager(object):
 
     def __len__(self):
         return mxs_eval(self.__mxs_re_count).Get()
+
+    @property
+    def Active(self):
+        return mxs_eval(self.__mxs_re_g_active).Get()
+
+    @Active.setter
+    def Active(self, value):
+        mxs_eval(self.__mxs_re_s_active % value)
+
+    @property
+    def Display(self):
+        return mxs_eval(self.__mxs_re_g_display).Get()
+
+    @Display.setter
+    def Display(self, value):
+        mxs_eval(self.__mxs_re_g_display % value)
 
     Elements = property(lambda self: (self[i] for i in xrange(len(self))))
 
