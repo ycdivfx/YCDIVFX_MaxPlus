@@ -174,7 +174,7 @@ class RenderElementManager(object):
 
     @Display.setter
     def Display(self, value):
-        mxs_eval(self.__mxs_re_g_display % value)
+        mxs_eval(self.__mxs_re_s_display % value)
 
     Elements = property(lambda self: (self[i] for i in xrange(len(self))))
 
