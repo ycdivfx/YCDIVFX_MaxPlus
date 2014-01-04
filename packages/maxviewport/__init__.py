@@ -33,8 +33,6 @@ class VpGrab():
         # Set filename
         bmi.SetName(name + FileType)
 
-        print bmi.GetName()
-
         # Create bitmap to hold the dib
         bmp = MaxPlus.Factory.CreateBitmap()
 
