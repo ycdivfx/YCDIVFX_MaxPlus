@@ -1,5 +1,5 @@
 import MaxPlus
-from maxhelpers import mxs_eval, BitmapTypes, ImageFileType
+from maxhelpers import mxs_eval, BitmapTypes, ImageFileType, CopyImageOperations
 
 
 class VpGrabType():
@@ -16,22 +16,22 @@ class VpGrab():
         """This class provides you methods to grab the 3dsmax viewport"""
         self.method = method
 
-    def ActiveViewport(self, name=(MaxPlus.PathManager.GetRenderOutputDir()
-                                   + r'\default'), FileType=ImageFileType.JPG):
+    def ActiveViewport(self, filename=(MaxPlus.PathManager.GetRenderOutputDir()
+                                   + r'\default.jpg')):
         """Grabs viewport to a file on the hard-drive.
 
-        :param str name: a valid path to an image file, no extension required
-        :param ImageFileType FileType: one of the available types in ImageFileType
+        :param str filename: a valid path to an image file, no extension required
 
         :rtype:  MaxPlus.Bitmap
         """
         # Create storage
-        storage = MaxPlus.Factory.CreateStorage(BitmapTypes.BMM_LINE_ART)
+        storage = MaxPlus.Factory.CreateStorage(BitmapTypes.BMM_TRUE_64)
 
         # Create BitmapInfo
         bmi = storage.GetBitmapInfo()
+
         # Set filename
-        bmi.SetName(name + FileType)
+        bmi.SetName(filename)
 
         # Create bitmap to hold the dib
         bmp = MaxPlus.Factory.CreateBitmap()
@@ -42,6 +42,49 @@ class VpGrab():
         av = vm.GetActiveViewport()
         # Grab the viewport dib into the bitmap
         av.GetDIB(bmi, bmp)
+
+        # Open bitmap for writing
+        bmp.OpenOutput(bmi)
+        # Save to file
+        bmp.Write(bmi)
+        # Close bitmap
+        bmp.Close(bmi)
+
+        return bmp
+
+    def ActiveViewportSize(self, filename=(MaxPlus.PathManager.GetRenderOutputDir()
+                                   + r'\default.jpg'), size=(640, 480)):
+        """Grabs viewport to a file on the hard-drive.
+
+        :param str filename: a valid path to an image file, no extension required
+
+        :rtype:  MaxPlus.Bitmap
+        """
+        # Create storage
+        storage = MaxPlus.Factory.CreateStorage(BitmapTypes.BMM_TRUE_64)
+
+        # Create BitmapInfo
+        bmi = storage.GetBitmapInfo()
+
+        # Create bitmap to hold the dib
+        grab = MaxPlus.Factory.CreateBitmap()
+
+        # Viewport Manager
+        vm = MaxPlus.ViewportManager
+        # Get active viewport
+        av = vm.GetActiveViewport()
+        # Grab the viewport dib into the bitmap
+        av.GetDIB(bmi, grab)
+
+        # Set filename & Size
+        bmi.SetName(filename)
+        bmi.SetWidth(size[0])
+        bmi.SetHeight(size[1])
+
+        # Create new bitmap to hold the resized version
+        bmp = MaxPlus.Factory.CreateBitmap(bmi)
+        bmp.CopyImage(grab, CopyImageOperations.COPY_IMAGE_RESIZE_HI_QUALITY, 1)
+        grab.Close(bmi)
 
         # Open bitmap for writing
         bmp.OpenOutput(bmi)
