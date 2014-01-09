@@ -1,2 +1,2 @@
 clearListener()
-python.ExecuteFile (getFilenamePath(getThisScriptFilename()) + "grabviewport.py")
+python.ExecuteFile (getFilenamePath(getThisScriptFilename()) + "selectbyvolume.py")
