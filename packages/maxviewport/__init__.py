@@ -1,6 +1,9 @@
 import MaxPlus
 from maxhelpers import mxs_eval, BitmapTypes, ImageFileType, CopyImageOperations
 
+"""
+To disable button labels in maxscript: ViewportButtonMgr.EnableButtons = False
+"""
 
 class VpGrabType():
     """Enumerates the method used for viewport grabbing.
