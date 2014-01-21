@@ -4,7 +4,7 @@ import fbauth
 
 class FbConnector():
     def __init__(self):
-        self.token = fbauth.getaccesstoken()
+        self.token = fbauth.getAccessToken()
         self.graph = GraphAPI(self.token)
 
     def postimage(self, caption, filename):

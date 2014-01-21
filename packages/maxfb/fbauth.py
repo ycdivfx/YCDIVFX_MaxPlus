@@ -1,19 +1,17 @@
-import os
 import urlparse
 import BaseHTTPServer
 import webbrowser
-import requests
 
-access_token = None
+ACCESS_TOKEN = None
 auth_url = 'http://www.youcandoitvfx.com/fb/'
-local_file = r'.fb_access_token'
+local_file = '.fb_access_token'
 server_host = '127.0.0.1'
 server_port = 80
 
 
 class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_GET(self):
-        global access_token
+        global ACCESS_TOKEN
 
         self.send_response(200)
         self.send_header("Content-type", "text/html")
@@ -27,7 +25,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
         _access_token = params.get('access_token', 'error')
         if (_access_token != 'error') and (len(_access_token) != 0):
-            access_token = _access_token
+            ACCESS_TOKEN = _access_token
 
         self.wfile.write("""<html>
                             <head>
@@ -46,14 +44,14 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 
 def getAccessToken():
-    global access_token
+    global ACCESS_TOKEN
 
     server_class = BaseHTTPServer.HTTPServer
     httpd = server_class((server_host, server_port), MyHandler)
     webbrowser.open(auth_url)
-    while access_token is None:
+    while ACCESS_TOKEN is None:
         httpd.handle_request()
 
     httpd.server_close()
 
-    return access_token
+    return ACCESS_TOKEN
