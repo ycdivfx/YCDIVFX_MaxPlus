@@ -5,7 +5,7 @@ if __name__ == '__main__':
 
     print 'Your Facebook username is:' + fbc.getusername()
 
-    message = '3dsmax python connector with automatic authentication'
-    fbc.postmessage(message)
-    imagefilename = r'c:\test.jpg'
-    fbc.postimage('', imagefilename)
+    #message = '3dsmax python connector with automatic authentication'
+    #fbc.postmessage(message)
+    #imagefilename = r'c:\test.jpg'
+    #fbc.postimage('', imagefilename)

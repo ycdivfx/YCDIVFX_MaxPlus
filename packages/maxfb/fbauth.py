@@ -5,61 +5,55 @@ import webbrowser
 import requests
 
 access_token = None
-success = False
 auth_url = 'http://www.youcandoitvfx.com/fb/'
-local_file = '.fb_access_token'
+local_file = r'.fb_access_token'
 server_host = '127.0.0.1'
 server_port = 80
 
 
 class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_GET(self):
-        global access_token, success
-        """Respond to a GET request."""
-        self.send_response(301)
-        self.send_header('Location', auth_url + 'close.html')
+        global access_token
+
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
+
         parsed_path = urlparse.urlparse(self.path)
         try:
             params = dict([p.split('=') for p in parsed_path[4].split('&')])
         except:
             params = {}
 
-        access_token = params.get('access_token', 'error')
-        if (access_token != 'error') and (len(access_token) != 0):
+        _access_token = params.get('access_token', 'error')
+        if (_access_token != 'error') and (len(_access_token) != 0):
+            access_token = _access_token
 
-            self.wfile.write(access_token)
-            success = True
-        else:
-            success = False
+        self.wfile.write("""<html>
+                            <head>
+                            <title>Close</title>
+                            <script type=\"text/javascript\">
+                            function closeMe(){
+                              window.open(\"\",\"_self\");
+                              window.close();
+                            }
+                            closeMe();
+                            </script>
+                            </head>
+                            <body>
+                            </body>
+                            </html>""")
 
 
-def checktokenstatus(local_file):
-    if os.path.exists(local_file):
-        local_token = open(local_file).read()
-        r = requests.get('https://graph.facebook.com/debug_token',
-                         params={'input_token' : local_token, 'access_token' : local_token})
-        data = r.json()
-        if 'error' in data:
-            return True
-    return False
+def getAccessToken():
+    global access_token
 
+    server_class = BaseHTTPServer.HTTPServer
+    httpd = server_class((server_host, server_port), MyHandler)
+    webbrowser.open(auth_url)
+    while access_token is None:
+        httpd.handle_request()
 
-def getaccesstoken():
-    global access_token, success
-
-    if checktokenstatus(local_file):
-        os.remove(local_file)
-
-    if os.path.exists(local_file):
-            access_token = open(local_file).read()
-    else:
-        server_class = BaseHTTPServer.HTTPServer
-        httpd = server_class((server_host, server_port), MyHandler)
-        webbrowser.open(auth_url)
-        while access_token is None:
-            httpd.handle_request()
-        if success:
-            open(local_file,'w').write(access_token)
-        httpd.server_close()
+    httpd.server_close()
 
     return access_token
