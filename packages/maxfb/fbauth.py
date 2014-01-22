@@ -4,7 +4,6 @@ import webbrowser
 
 ACCESS_TOKEN = None
 auth_url = 'http://www.youcandoitvfx.com/fb/'
-local_file = '.fb_access_token'
 server_host = '127.0.0.1'
 server_port = 80
 
@@ -13,8 +12,8 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_GET(self):
         global ACCESS_TOKEN
 
-        self.send_response(200)
-        self.send_header("Content-type", "text/html")
+        self.send_response(301)
+        self.send_header('Location', auth_url + 'close.html')
         self.end_headers()
 
         parsed_path = urlparse.urlparse(self.path)
@@ -27,24 +26,10 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         if (_access_token != 'error') and (len(_access_token) != 0):
             ACCESS_TOKEN = _access_token
 
-        self.wfile.write("""<html>
-                            <head>
-                            <title>Close</title>
-                            <script type=\"text/javascript\">
-                            function closeMe(){
-                              window.open(\"\",\"_self\");
-                              window.close();
-                            }
-                            closeMe();
-                            </script>
-                            </head>
-                            <body>
-                            </body>
-                            </html>""")
-
-
 def getAccessToken():
     global ACCESS_TOKEN
+
+    ACCESS_TOKEN = None
 
     server_class = BaseHTTPServer.HTTPServer
     httpd = server_class((server_host, server_port), MyHandler)
