@@ -11,10 +11,9 @@ $facebook = new Facebook(array(
 
 $user = $facebook->getUser();
 
-if ($user) {
-	$user_profile = $facebook->api('/me');
+if ($user) {	
 	$access_token = $facebook->getAccessToken();
-    // Pass over the access token back to our python webserver to be caught by the BaseHTTPRequestHandler and stored
+	// Pass over the access token back to our python webserver to be caught by the BaseHTTPRequestHandler and stored
 	header("Location: http://127.0.0.1?access_token=". $access_token);
 }
 ?>

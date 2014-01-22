@@ -12,15 +12,14 @@ $facebook = new Facebook(array(
 $post_login = 'http://www.yourserver.com/getaccesstoken.php';
 
 // Get User ID
-$user = $facebook->getUser();
+$uid = $facebook->getUser();
 
 // If the user is logged in and with permissions, let's move on and get the access token.
-if ($user) 
-{	
-	header("Location: ". $post_login);
+if(!empty($udid)){	
+	header("Location: ". $post_login); 
 } 
 else 
-{
+{	
 	$params = array(
 		redirect_uri => $post_login,
 		scope => 'read_stream,publish_stream'
