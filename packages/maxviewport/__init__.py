@@ -23,7 +23,7 @@ class VpGrab():
                                    + r'\default.jpg')):
         """Grabs viewport to a file on the hard-drive.
 
-        :param str filename: a valid path to an image file, no extension required
+        :param str filename: a valid path to an image file
 
         :rtype:  MaxPlus.Bitmap
         """
@@ -59,7 +59,7 @@ class VpGrab():
                                    + r'\default.jpg'), size=(640, 480)):
         """Grabs viewport to a file on the hard-drive.
 
-        :param str filename: a valid path to an image file, no extension required
+        :param str filename: a valid path to an image file
 
         :rtype:  MaxPlus.Bitmap
         """
