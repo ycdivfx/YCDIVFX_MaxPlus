@@ -1,10 +1,10 @@
-def mxs_eval(*args):
+def mxs_eval(args):
     """EvalMAXScript(wchar_t const * s, FPValue result) -> bool
     EvalMAXScript(wchar_t const * s) -> FPValue
     """
     import MaxPlus
 
-    return MaxPlus.Core.EvalMAXScript(*args)
+    return MaxPlus.Core.EvalMAXScript(args)
 
 
 class BitmapTypes(object):
