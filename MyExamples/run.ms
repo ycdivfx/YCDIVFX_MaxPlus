@@ -1,2 +1,2 @@
 clearListener()
-python.ExecuteFile (getFilenamePath(getThisScriptFilename()) + "selectbyvolume.py")
+python.ExecuteFile (getFilenamePath(getThisScriptFilename()) + "maxplusconsole.py")
