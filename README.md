@@ -3,7 +3,8 @@ YCDIVFX MaxPlus Packages
 [![Build Status](https://travis-ci.org/arturleao/YCDIVFX_MaxPlus.png?branch=master)](https://travis-ci.org/arturleao/YCDIVFX_MaxPlus)
 * Add the 'packages' folder to your PYTHONPATH envirnoment variable
 * Edit settings.ini and change the paths
-* maxfb has a depedency on facepy package (https://github.com/jgorset/facepy) and python-requests (http://www.python-requests.org)
+* maxfb has a depedency on facepy (https://github.com/jgorset/facepy)
+* maxplusconsole as a dependency on PySideKick (https://github.com/cloudmatrix/pysidekick/)
 
 run.py usage
 -------------
