@@ -26,27 +26,15 @@ def getScriptPath():
 
 PACKAGEDIR = getScriptPath()
 
-
-def get3dsmaxHWND():
-    """
-    Gets the main 3dsmax window handle
-    """
-    return MaxPlus.Core_GetWindowHandle()
-
-
 MainWindowForm, MainWindowBase = uic.loadUiType(
     os.path.join(getScriptPath(), 'ui', 'editor.ui'))
 
 
-def mxsExecutePython(code):
-    code = code.replace('\r\n', '\n')
-    code = code.replace(r'"', '\'')
-    formattedcode = ''
-    #for line in code.split('\n'):
-    #    formattedcode += line + '\n'
-    print formattedcode
-    fne = 'python.Execute("' + code + '")'
-    return fne
+def formatStringtoMaxscript(code):
+    code = code.replace('\"', '\'')
+    code = code.replace('\\', '\\\\')
+    res = 'python.Execute("%s")' % code
+    return res
 
 
 class MainWindow(MainWindowBase, MainWindowForm):
@@ -68,6 +56,15 @@ MaxPlus.Core.WriteLine("hello world")''')
         self.actionOpen.triggered.connect(self.loadFile)
 
         self.connect(self.tabWidget, QtCore.SIGNAL('tabCloseRequested(int)'), self.closeTab)
+
+        self.app = QtGui.QApplication.instance()
+        if not self.app:
+            self.app = QtGui.QApplication([])
+
+        # Install filter so we can disable 3dsMax accelerators everytime we focus on our Script Editor
+        self.filter = _FocusFilter(self)
+        self.app.installEventFilter(self.filter)
+
 
     def setupUiEditor(self, editor, font):
         ## define the font to use
@@ -136,7 +133,6 @@ MaxPlus.Core.WriteLine("hello world")''')
             self.tabWidget.setCurrentIndex(idx)
             data = f.read()
             neweditor.setText(data)
-            neweditor.tri
 
     def closeTab(self, idx):
         if self.tabWidget.count() != 1:
@@ -150,16 +146,24 @@ MaxPlus.Core.WriteLine("hello world")''')
 
     def editorRun(self):
         pycode = str(self.getCurrentTabScript())
-        MaxPlus.Core.EvalMAXScript(mxsExecutePython(pycode))
+        MaxPlus.Core.EvalMAXScript(formatStringtoMaxscript(pycode))
 
     def editorClear(self):
         MaxPlus.Core.EvalMAXScript('clearListener()')
 
+    def closeEvent(self, event):
+        self.app.removeEventFilter(self.filter)
+
+class _FocusFilter(QtCore.QObject):
+    """ Used to filter events to properly manage focus in 3ds Max. This is a hack to deal with the fact
+        that mixing Qt and Win32 causes focus events to not get triggered as expected. """
+
+    def eventFilter(self, obj, event):
+        if event.type() == QtCore.QEvent.MouseButtonPress:
+            MaxPlus.CUI.DisableAccelerators()
+        return False
+
 
 if __name__ == '__main__':
-    app = QtGui.QApplication.instance()
-    if not app:
-        app = QtGui.QApplication([])
-
     window = MainWindow()
     window.show()
