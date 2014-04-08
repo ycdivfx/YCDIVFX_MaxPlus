@@ -1,3 +1,6 @@
+'''
+Taken from Sublime3dsmax : http://cbuelter.de/?p=535
+'''
 ############################################################################
 #
 #   This module finds 3ds Max and the MAXScript Listener and can

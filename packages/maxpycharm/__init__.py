@@ -1,1 +1,1 @@
-__author__ = 'Artur Leao'
+from maxpycharm import tomax, PyCharm3dsMax
