@@ -1,12 +1,13 @@
 import MaxPlus
 from maxhelpers import mxs_eval, BitmapTypes, ImageFileType, CopyImageOperations
 
-"""
+'''
 To disable button labels in maxscript: ViewportButtonMgr.EnableButtons = False
-"""
+'''
 
 class VpGrabType():
-    """Enumerates the method used for viewport grabbing.
+    """
+    Enumerates the method used for viewport grabbing.
     viewport method allows you to grab the viewport with Depht of field and Motion Blur because it includes the results
     of maxops.displayActiveCameraViewWithMultiPassEffect()
     """
@@ -21,7 +22,7 @@ class VpGrab():
 
     def ActiveViewport(self, filename=(MaxPlus.PathManager.GetRenderOutputDir()
                                    + r'\default.jpg')):
-        """Grabs viewport to a file on the hard-drive.
+        """Grabs viewport to a file on the hard-drive using default viewport size.
 
         :param str filename: a valid path to an image file
 
@@ -48,19 +49,17 @@ class VpGrab():
 
         # Open bitmap for writing
         bmp.OpenOutput(bmi)
-        # Save to file
         bmp.Write(bmi)
-        # Close bitmap
         bmp.Close(bmi)
 
         return bmp
 
     def ActiveViewportSize(self, filename=(MaxPlus.PathManager.GetRenderOutputDir()
                                    + r'\default.jpg'), size=(640, 480)):
-        """Grabs viewport to a file on the hard-drive.
+        """Grabs viewport to a file on the hard-drive in a specific size.
 
         :param str filename: a valid path to an image file
-
+        :param tuple size: a valid list containing width and height
         :rtype:  MaxPlus.Bitmap
         """
         # Create storage
@@ -91,9 +90,7 @@ class VpGrab():
 
         # Open bitmap for writing
         bmp.OpenOutput(bmi)
-        # Save to file
         bmp.Write(bmi)
-        # Close bitmap
         bmp.Close(bmi)
 
         return bmp
