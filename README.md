@@ -11,6 +11,7 @@ PyCharm usage
 -------------
 
 Create a new configuration. Fill in with the following values:
+
 Script: C:\YCDIVFX\MaxPlus\Examples\run.py
 Script parameters: -f C:\YCDIVFX\MaxPlus\Examples\pyqt_pyeditor.py
 
