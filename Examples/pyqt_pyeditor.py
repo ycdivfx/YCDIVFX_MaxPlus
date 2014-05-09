@@ -1,5 +1,4 @@
 import os
-import sys
 from PyQt4 import QtGui, uic, QtCore
 from PyQt4.Qsci import QsciScintilla, QsciLexerPython
 
@@ -22,10 +21,6 @@ def formatstringtomaxscript(code):
     res = 'python.Execute("%s")' % code
     return res
 
-app = QtGui.QApplication.instance()
-if not app:
-    app = QtGui.QApplication([])
-
 
 class MainWindow(MainWindowBase, MainWindowForm):
     def __init__(self, parent=None):
@@ -46,10 +41,6 @@ MaxPlus.Core.WriteLine("hello world")''')
         self.actionOpen.triggered.connect(self.loadfile)
 
         self.connect(self.tabWidget, QtCore.SIGNAL('tabCloseRequested(int)'), self.closetab)
-
-        # Install filter so we can disable 3dsMax accelerators everytime we focus on our Script Editor
-        self.filter = _FocusFilter(self)
-        app.installEventFilter(self.filter)
 
 
     def setupui(self, editor, font):
@@ -137,8 +128,6 @@ MaxPlus.Core.WriteLine("hello world")''')
     def editorclear(self):
         MaxPlus.Core.EvalMAXScript('clearListener()')
 
-    def closevent(self, event):
-        self.app.removeEventFilter(self.filter)
 
 class _FocusFilter(QtCore.QObject):
     """ Used to filter events to properly manage focus in 3ds Max. This is a hack to deal with the fact
@@ -151,5 +140,13 @@ class _FocusFilter(QtCore.QObject):
 
 
 if __name__ == '__main__':
+    app = QtGui.QApplication.instance()
+    if not app:
+        app = QtGui.QApplication([])
+
+    # Install filter so we can disable 3dsMax accelerators everytime we focus on our Script Editor
+    filter = _FocusFilter()
+    app.installEventFilter(filter)
+
     window = MainWindow()
     window.show()
