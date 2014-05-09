@@ -1,5 +1,5 @@
 import os
-from PyQt4 import QtGui
+from PySide import QtGui
 
 import MaxPlus
 

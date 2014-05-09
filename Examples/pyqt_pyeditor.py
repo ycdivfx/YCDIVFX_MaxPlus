@@ -5,36 +5,26 @@ from PyQt4.Qsci import QsciScintilla, QsciLexerPython
 
 import MaxPlus
 
-MAX_DEBUG = False
 
-
-def debugMode():
-    pydev_path = r'C:\Program Files (x86)\JetBrains\PyCharm 3.0\helpers'
-    if not pydev_path in sys.path:
-        sys.path.append(pydev_path)
-
-    from pydev import pydevd
-    pydevd.settrace('localhost', port=7720, suspend=False)
-
-if MAX_DEBUG:
-    debugMode()
-
-
-def getScriptPath():
+def getscriptpath():
     pkgdir = os.path.dirname(os.path.abspath(__file__))
     return pkgdir
 
-PACKAGEDIR = getScriptPath()
+PACKAGEDIR = getscriptpath()
 
 MainWindowForm, MainWindowBase = uic.loadUiType(
-    os.path.join(getScriptPath(), 'ui', 'editor.ui'))
+    os.path.join(getscriptpath(), 'ui', 'editor.ui'))
 
 
-def formatStringtoMaxscript(code):
+def formatstringtomaxscript(code):
     code = code.replace('\"', '\'')
     code = code.replace('\\', '\\\\')
     res = 'python.Execute("%s")' % code
     return res
+
+app = QtGui.QApplication.instance()
+if not app:
+    app = QtGui.QApplication([])
 
 
 class MainWindow(MainWindowBase, MainWindowForm):
@@ -43,7 +33,7 @@ class MainWindow(MainWindowBase, MainWindowForm):
 
         self.setupUi(self)
         self.font = QtGui.QFont()
-        self.setupUiEditor(self.textEdit, self.font)
+        self.setupui(self.textEdit, self.font)
         self.lexer = QsciLexerPython()
 
         self.textEdit.setLexer(self.lexer)
@@ -51,22 +41,18 @@ class MainWindow(MainWindowBase, MainWindowForm):
 # Look in the MAXScript listener
 MaxPlus.Core.WriteLine("hello world")''')
 
-        self.btn_run.triggered.connect(self.editorRun)
-        self.btn_clear.triggered.connect(self.editorClear)
-        self.actionOpen.triggered.connect(self.loadFile)
+        self.btn_run.triggered.connect(self.editorrun)
+        self.btn_clear.triggered.connect(self.editorclear)
+        self.actionOpen.triggered.connect(self.loadfile)
 
-        self.connect(self.tabWidget, QtCore.SIGNAL('tabCloseRequested(int)'), self.closeTab)
-
-        self.app = QtGui.QApplication.instance()
-        if not self.app:
-            self.app = QtGui.QApplication([])
+        self.connect(self.tabWidget, QtCore.SIGNAL('tabCloseRequested(int)'), self.closetab)
 
         # Install filter so we can disable 3dsMax accelerators everytime we focus on our Script Editor
         self.filter = _FocusFilter(self)
-        self.app.installEventFilter(self.filter)
+        app.installEventFilter(self.filter)
 
 
-    def setupUiEditor(self, editor, font):
+    def setupui(self, editor, font):
         ## define the font to use
 
         font.setFamily('Consolas')
@@ -108,14 +94,14 @@ MaxPlus.Core.WriteLine("hello world")''')
         # folding margin colors (foreground,background)
         editor.setFoldMarginColors(QtGui.QColor('Lime'),QtGui.QColor('White'))
 
-    def addNewTab(self, tw, tname):
+    def newtab(self, tw, tname):
         newtab = QtGui.QWidget()
         vlayout = QtGui.QVBoxLayout()
         vlayout.setMargin(0)
 
         neweditor = QsciScintilla(newtab)
         neweditor.setStyleSheet("border:0")
-        self.setupUiEditor(neweditor, self.font)
+        self.setupui(neweditor, self.font)
         neweditor.setLexer(self.lexer)
 
         vlayout.addWidget(neweditor)
@@ -123,35 +109,35 @@ MaxPlus.Core.WriteLine("hello world")''')
 
         return tw.addTab(newtab, os.path.basename(str(tname))), neweditor
 
-    def loadFile(self):
+    def loadfile(self):
         fname = QtGui.QFileDialog.getOpenFileName(
             self, 'Open file', os.path.join(PACKAGEDIR, '..\Examples'))
 
         f = open(fname, 'r')
         with f:
-            idx, neweditor = self.addNewTab(self.tabWidget, os.path.basename(str(fname)))
+            idx, neweditor = self.newtab(self.tabWidget, os.path.basename(str(fname)))
             self.tabWidget.setCurrentIndex(idx)
             data = f.read()
             neweditor.setText(data)
 
-    def closeTab(self, idx):
+    def closetab(self, idx):
         if self.tabWidget.count() != 1:
             self.tabWidget.removeTab(idx)
 
-    def getCurrentTabScript(self):
+    def gettabtext(self):
         ctab = self.tabWidget.currentWidget()
         for idx, child in enumerate(ctab.children()):
             if type(child) is type(QsciScintilla()):
                 return child.text()
 
-    def editorRun(self):
-        pycode = str(self.getCurrentTabScript())
-        MaxPlus.Core.EvalMAXScript(formatStringtoMaxscript(pycode))
+    def editorrun(self):
+        pycode = str(self.gettabtext())
+        MaxPlus.Core.EvalMAXScript(formatstringtomaxscript(pycode))
 
-    def editorClear(self):
+    def editorclear(self):
         MaxPlus.Core.EvalMAXScript('clearListener()')
 
-    def closeEvent(self, event):
+    def closevent(self, event):
         self.app.removeEventFilter(self.filter)
 
 class _FocusFilter(QtCore.QObject):

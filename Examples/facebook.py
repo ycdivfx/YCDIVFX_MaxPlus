@@ -1,5 +1,6 @@
 import maxfb
 
+
 if __name__ == '__main__':
     fbc = maxfb.FbConnector()
 
