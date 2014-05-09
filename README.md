@@ -11,12 +11,12 @@ PyCharm usage
 -------------
 
 Create a new configuration. Fill in with the following values:
-Script: C:\YCDIVFX\MaxPlus\MyExamples\run.py
-Script parameters: -f C:\YCDIVFX\MaxPlus\MyExamples\pyeditor.py
+Script: C:\YCDIVFX\MaxPlus\Examples\run.py
+Script parameters: -f C:\YCDIVFX\MaxPlus\Examples\pyqt_pyeditor.py
 
 Command-line usage
 -------------
 
-python.exe C:\YCDIVFX\MaxPlus\MyExamples\run.py -f C:\YCDIVFX\MaxPlus\MyExamples\pyeditor.py
+python.exe C:\YCDIVFX\MaxPlus\MyExamples\run.py -f C:\YCDIVFX\MaxPlus\Examples\pyqt_pyeditor.py
 
 (3ds Max needs to be open. You need to use full paths)
