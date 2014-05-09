@@ -1,6 +1,6 @@
-import os
 import BaseHTTPServer
 import cgi
+import os
 import sys
 import threading
 

@@ -1,6 +1,7 @@
 YCDIVFX MaxPlus Packages
 ========================
 [![Build Status](https://travis-ci.org/arturleao/YCDIVFX_MaxPlus.png?branch=master)](https://travis-ci.org/arturleao/YCDIVFX_MaxPlus)
+
 * Add the 'packages' folder to your PYTHONPATH envirnoment variable
 * maxpycharm based on Sublime3dsMax (http://cbuelter.de/?p=535)
 * maxfb has a depedency on facepy (https://github.com/jgorset/facepy)
