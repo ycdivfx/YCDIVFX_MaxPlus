@@ -9,7 +9,7 @@ import tomax
 MAX_NOT_FOUND = r"Could not find a 3ds Max instance."
 RECORDER_NOT_FOUND = r"Could not find MAXScript Macro Recorder"
 
-def sendCmdToMax(cmd):
+def run(cmd):
     if not tomax.connectToMax(): # Always connect first
         print (MAX_NOT_FOUND)
         return

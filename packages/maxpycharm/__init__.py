@@ -1,1 +1,0 @@
-from maxpycharm import tomax, PyCharm3dsMax

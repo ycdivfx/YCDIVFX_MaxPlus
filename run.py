@@ -5,7 +5,7 @@ from optparse import OptionParser
 packagesdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'packages')
 sys.path.append(packagesdir)
 
-import maxpycharm
+import maxconnect
 
 parser = OptionParser()
 parser.add_option('-f', dest='filename', help='Maxscript FILENAME')
@@ -21,4 +21,4 @@ if __name__ == '__main__':
             cmd = r'fileIn @"%s";' % options.filename
         else:
             cmd = r'print "Invalid filetype";'
-        maxpycharm.PyCharm3dsMax.sendCmdToMax(cmd)
+        maxconnect.pycharm.run(cmd)
