@@ -9,7 +9,7 @@ class _GCProtector(object):
     widgets = []
 
 
-def MaxWindow(widget, parented=True):
+def MaxWindow(widget, parented=False):
     """
     Decorator for QWidget, making it work with 3dsmax.
     @param widget - Widget to be handled
@@ -20,7 +20,7 @@ def MaxWindow(widget, parented=True):
     orig_show = widget.show
 
     def __init__(self, *args, **kwargs):
-        defs = {'stylename': 'Plastique', 'theme': 'light'}
+        defs = {'stylename': 'Plastique', 'theme': None}
         orig_init(self, *args, **kwargs)
         defs.update(kwargs)
         # Make widget garbage collected.
@@ -35,10 +35,12 @@ def MaxWindow(widget, parented=True):
                 control.setStyle(QtGui.QStyleFactory.create(stylename))
 
         # Dark theme detection.
-        if MaxPlus.Core.EvalMAXScript('((colorman.getcolor #window) * 255)[1] < 120'
-                                      ' and ((colorman.getcolor #window) * 255)[2] < 120'
-                                      ' and ((colorman.getcolor #window) * 255)[3] < 120'):
+        if theme is None and MaxPlus.Core.EvalMAXScript('((colorman.getcolor #window) * 255)[1] < 120'
+                                                        ' and ((colorman.getcolor #window) * 255)[2] < 120'
+                                                        ' and ((colorman.getcolor #window) * 255)[3] < 120'):
             theme = 'dark'
+        else:
+            theme = 'light'
 
         if theme.lower() == 'dark':
             self.setStyleSheet('QWidget {'
