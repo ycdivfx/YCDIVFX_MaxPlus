@@ -1,5 +1,5 @@
-import ctypes
-from PySide import QtGui, QtCore
+from PySide import QtGui, QtCore, shiboken
+
 import MaxPlus
 
 
@@ -7,7 +7,7 @@ def make_cylinder():
     obj = MaxPlus.Factory.CreateGeomObject(MaxPlus.ClassIds.Cylinder)
     obj.ParameterBlock.Radius.Value = 10.0
     obj.ParameterBlock.Height.Value = 30.0
-    node = MaxPlus.Factory.CreateNode(obj)
+    MaxPlus.Factory.CreateNode(obj)
     time = MaxPlus.Core.GetCurrentTime()
     MaxPlus.ViewportManager.RedrawViews(time)
 
@@ -23,7 +23,10 @@ def main():
     if not app:
         app = QtGui.QApplication([])
 
-    mainWindow  = QtGui.QMainWindow()
+    maxWindowPtr = MaxPlus.Win32.GetMAXHWnd()
+    maxWindow = shiboken.wrapInstance(maxWindowPtr, QtGui.QWidget)
+
+    mainWindow = QtGui.QMainWindow(maxWindow)
     _GCProtector.controls.append(mainWindow)
     mainWindow.setWindowTitle('Simple tool')
     mainWindow.resize(250,50)

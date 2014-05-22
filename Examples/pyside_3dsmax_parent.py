@@ -3,8 +3,6 @@ from PySide import QtGui, QtCore
 
 import MaxPlus
 
-import maxui
-
 
 def make_cylinder():
     obj = MaxPlus.Factory.CreateGeomObject(MaxPlus.ClassIds.Cylinder)
@@ -37,11 +35,11 @@ def main():
     main_layout.addWidget(cylinder_btn)
     widget.setLayout(main_layout)
 
-
-
     cylinder_btn.clicked.connect(make_cylinder)
 
-    widget.setWindowFlags(QtCore.Qt.Tool | QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.MSWindowsFixedSizeDialogHint)
+    widget.setWindowFlags(QtCore.Qt.Tool |
+                          QtCore.Qt.WindowStaysOnTopHint |
+                          QtCore.Qt.MSWindowsFixedSizeDialogHint)
     widget.setAttribute(QtCore.Qt.WA_DeleteOnClose)
     widget.setAttribute(QtCore.Qt.WA_QuitOnClose)
     widget.setAttribute(QtCore.Qt.WA_X11NetWmWindowTypeDialog)
