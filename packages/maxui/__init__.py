@@ -9,23 +9,22 @@ class _GCProtector(object):
     widgets = []
 
 
-def MaxWindow(widget, parented=False):
+def MaxWindow(widget):
     """
     Decorator for QWidget, making it work with 3dsmax.
-    @param widget - Widget to be handled
-    @param parented - Should we parent to the 3dsmax MaxWindow.
+    @param QWidget widget - Widget to be handled
     @return - The decorated class
     """
     orig_init = widget.__init__
     orig_show = widget.show
 
     def __init__(self, *args, **kwargs):
-        defs = {'stylename': 'Plastique', 'theme': None}
+        defs = {'stylename': 'Plastique', 'theme': None, 'parented': False}
         orig_init(self, *args, **kwargs)
         defs.update(kwargs)
         # Make widget garbage collected.
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
-        self._parented = parented
+        self._parented = defs['parented']
         self._has_parent = False
         self._setupUI(defs['stylename'], defs['theme'])
 
