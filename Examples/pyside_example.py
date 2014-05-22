@@ -9,7 +9,7 @@ def make_cylinder():
     obj = MaxPlus.Factory.CreateGeomObject(MaxPlus.ClassIds.Cylinder)
     obj.ParameterBlock.Radius.Value = 10.0
     obj.ParameterBlock.Height.Value = 30.0
-    node = MaxPlus.Factory.CreateNode(obj)
+    MaxPlus.Factory.CreateNode(obj)
     time = MaxPlus.Core.GetCurrentTime()
     MaxPlus.ViewportManager.RedrawViews(time)
 
