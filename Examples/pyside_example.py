@@ -27,7 +27,9 @@ class Widget(QtGui.QWidget):
         self.setLayout(layout)
         self.setWindowTitle('Simple 3ds Max PySide Example')
 
-        self.setWindowFlags(QtCore.Qt.Tool | QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.MSWindowsFixedSizeDialogHint)
+        self.setWindowFlags(QtCore.Qt.Tool |
+                            QtCore.Qt.WindowStaysOnTopHint |
+                            QtCore.Qt.MSWindowsFixedSizeDialogHint)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
 
         self.btnRun.clicked.connect(make_cylinder)

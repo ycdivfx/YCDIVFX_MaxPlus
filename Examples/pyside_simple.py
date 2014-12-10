@@ -23,10 +23,7 @@ def main():
     if not app:
         app = QtGui.QApplication([])
 
-    maxWindowPtr = MaxPlus.Win32.GetMAXHWnd()
-    maxWindow = shiboken.wrapInstance(maxWindowPtr, QtGui.QWidget)
-
-    mainWindow = QtGui.QMainWindow(maxWindow)
+    mainWindow = QtGui.QMainWindow()
     _GCProtector.controls.append(mainWindow)
     mainWindow.setWindowTitle('Simple tool')
     mainWindow.resize(250,50)

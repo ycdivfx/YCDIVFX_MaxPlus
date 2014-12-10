@@ -1,5 +1,6 @@
 import BaseHTTPServer
 import cgi
+import ctypes
 import os
 import sys
 import threading
@@ -70,7 +71,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         return
 
 
-class MyWindow(QtGui.QDialog):
+class MyWindow(QtGui.QWidget):
     def __init__(self, parent=None):
         super(MyWindow, self).__init__(parent)
         self.setWindowTitle('Simple 3ds Max webserver')
@@ -102,6 +103,9 @@ class MyWindow(QtGui.QDialog):
             self.serverThread.stop()
             self.serverThread = None
 
+class _GCProtector(object):
+    controls = []
+
 
 if __name__ == '__main__':
     app = QtGui.QApplication.instance()
@@ -109,9 +113,13 @@ if __name__ == '__main__':
         app = QtGui.QApplication([])
 
     window = MyWindow()
+    _GCProtector.controls.append(window)
     window.show()
 
-    try:
-        sys.exit(app.exec_())
-    except SystemExit:
-        pass
+    capsule = window.effectiveWinId()
+    ctypes.pythonapi.PyCObject_AsVoidPtr.restype = ctypes.c_void_p
+    ctypes.pythonapi.PyCObject_AsVoidPtr.argtypes = [ctypes.py_object]
+    ptr = ctypes.pythonapi.PyCObject_AsVoidPtr(capsule)
+
+    MaxPlus.Win32.Set3dsMaxAsParentWindow(ptr)
+
